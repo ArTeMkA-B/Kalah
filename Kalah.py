@@ -8,6 +8,9 @@ class Kalah:
         self.IsEnd = False
         self.winner = -1
 
+    def GetKalahIndex(self):
+        return self.kalah0_index if self.active_player == 0 else self.kalah1_index
+
     def GetPossibleMoves(self):
         start_index = 0 if self.active_player == 0 else 7
         possible_moves = [i for i in range(start_index, start_index+6) if self.state[i] > 0]
