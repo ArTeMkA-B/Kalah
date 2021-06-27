@@ -1,11 +1,13 @@
-from main import *
+from Kalah import *
 
 kalah = Kalah()
 assert kalah.state == [6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0], kalah.state
 assert kalah.GetScore(0) == 0
 assert kalah.GetScore(1) == 0
+assert kalah.GetPossibleMoves() == [0, 1, 2, 3, 4, 5], kalah.GetPossibleMoves()
 kalah.MakeMove(1)
 assert kalah.state == [6, 0, 7, 7, 7, 7, 1, 7, 6, 6, 6, 6, 6, 0], kalah.state
+assert kalah.GetPossibleMoves() == [7, 8, 9, 10, 11, 12], kalah.GetPossibleMoves()
 kalah.MakeMove(9)
 assert kalah.state == [7, 1, 7, 7, 7, 7, 1, 7, 6, 0, 7, 7, 7, 1], kalah.state
 kalah.MakeMove(5)
@@ -24,6 +26,7 @@ kalah.MakeMove(1)
 assert kalah.state == [10, 0, 11, 0, 10, 3, 3, 10, 8, 0, 10, 2, 2, 3], kalah.state
 kalah.MakeMove(11)
 assert kalah.state == [10, 0, 11, 0, 10, 3, 3, 10, 8, 0, 10, 0, 3, 4], kalah.state
+assert kalah.GetPossibleMoves() == [7, 8, 10, 12], kalah.GetPossibleMoves()
 kalah.MakeMove(12)
 assert kalah.state == [11, 1, 11, 0, 10, 3, 3, 10, 8, 0, 10, 0, 0, 5], kalah.state
 kalah.MakeMoves([0, 8, 1, 12, 11, 12, 9, 3])
@@ -32,7 +35,9 @@ kalah.MakeMoves([5, 9, 4])
 assert kalah.state == [2, 1, 15, 1, 0, 1, 10, 13, 0, 1, 16, 1, 1, 10], kalah.state
 kalah.MakeMoves([12, 11, 5, 3, 7, 3, 12, 11, 1, 8, 4, 5, 2, 4, 2, 12, 11, 1, 9, 3, 4, 8])
 assert kalah.state == [0, 0, 0, 0, 0, 5, 40, 1, 0, 0, 0, 0, 0, 26], kalah.state
+assert kalah.GetPossibleMoves() == [5], kalah.GetPossibleMoves()
 kalah.MakeMove(5)
 assert kalah.state == [0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 31], kalah.state
+assert kalah.GetPossibleMoves() == [], kalah.GetPossibleMoves()
 assert kalah.GetScore(0) == 41
 assert kalah.GetScore(1) == 31
