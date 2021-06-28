@@ -1,3 +1,6 @@
+from GameHistory import *
+from copy import deepcopy
+
 class Kalah:
     def __init__(self):
         self.state = [6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0]
@@ -7,6 +10,7 @@ class Kalah:
         self.kalah1_index = 13
         self.IsEnd = False
         self.winner = -1
+        self.history = GameHistory()
 
     def GetKalahIndex(self):
         return self.kalah0_index if self.active_player == 0 else self.kalah1_index
@@ -43,6 +47,8 @@ class Kalah:
 
         if log:
             print('Player', self.active_player, 'makes move:', move)
+
+        self.history.SaveMove(MoveInfo(self.active_player, move, deepcopy(self.state)))
 
         # move chips
         chips_count = self.state[move]
@@ -83,6 +89,15 @@ class Kalah:
             self.IsEnd = True
             if log:
                 self.PrintResult()
+        if log:
+            self.PrintState()
+
+    def UndoLastMove(self):
+        self.state = deepcopy(self.history.GetLastState())
+        self.active_player = self.history.GetLastActivePlayer()
+        self.IsEnd = False
+        self.winner = -1
+        self.history.DeleteLastMove()
 
     def PrintResult(self):
         print("Game over!")
