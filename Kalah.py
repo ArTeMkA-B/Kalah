@@ -38,16 +38,13 @@ class Kalah:
         return self.active_player == 0 and cell_index == self.kalah0_index or self.active_player == 1 and cell_index == self.kalah1_index
 
     def MakeMove(self, move, log=False):
-
         if self.IsEnd:
             print('Game is over')
             return
         assert move >= 0 and move < self.cells_number and self.IsOwnCell(move) and \
                move != self.kalah0_index and move != self.kalah0_index and self.state[move] != 0, 'Impossible move ' + str(move)
-
         if log:
             print('Player', self.active_player, 'makes move:', move)
-
         self.history.SaveMove(MoveInfo(self.active_player, move, deepcopy(self.state)))
 
         # move chips
@@ -108,9 +105,9 @@ class Kalah:
         else:
             print("Equal scores!")
 
-    def MakeMoves(self, moves_array):
+    def MakeMoves(self, moves_array:list, log=False):
         for move in moves_array:
-            self.MakeMove(move)
+            self.MakeMove(move, log)
 
     def GetRemainingChips(self):
         if self.active_player == 0:

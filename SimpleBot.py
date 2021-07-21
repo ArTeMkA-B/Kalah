@@ -3,13 +3,20 @@ from Kalah import *
 
 
 class SimpleBot:
-    def __init__(self, id):
+    def __init__(self, id, log=False):
         self.id = id  # 0 or 1
         self.score = 72
+        self.log = log
 
-    def ChooseMove(self, state, moves, kalah_index, kalah:Kalah):  # delete extra params
+
+    def ChooseMove(self, kalah:Kalah):
+
+        state = kalah.state
+        moves = kalah.GetPossibleMoves()
+        kalah_index = kalah.GetKalahIndex()
+
         if len(moves) == 1:
-            return moves[0]
+            return [moves[0]]
 
         """"# find moves with eating opponent chips
         limit = 13 if self.id == 0 else 20
@@ -41,7 +48,7 @@ class SimpleBot:
             scores[move] = self.score - scores_before
             self.score = 72
         scores = dict(sorted(scores.items(), key=lambda x: x[1], reverse=True))
-        scores_moves = list(scores.keys())
+        not_again_moves = list(scores.keys())
 
         """moves_count = len(scores_moves) + len(again_moves)
         opponent_start = 0 if self.id == 1 else 7
@@ -54,9 +61,15 @@ class SimpleBot:
                 count += 1"""
 
         if len(again_moves) > 0:
-            if len(scores_moves) == 0 or again_moves[0] > scores_moves[0]:  # and (kalah.GetScore(self.id) + count >= 36 or moves_count > 3 or possible_opponent_kalah < 36):
-                return again_moves[0]
-        return scores_moves[0]  # add random
+            if len(not_again_moves) == 0 or again_moves[0] > not_again_moves[0]: #and (len(moves) > 2 or kalah.GetScore(self.id) >= 35):
+                if self.log:
+                    print('(SB)', kalah.state, ':', moves, '=>', [again_moves[0]])
+                return [again_moves[0]]
+        best_moves = [move for move in not_again_moves if scores.get(move) == scores.get(not_again_moves[0])]
+        chosen_move = [best_moves[randint(0, len(best_moves) - 1)]]
+        if self.log:
+            print('(SB)', kalah.state, ':', moves, '=>', chosen_move)
+        return chosen_move
 
         """ if len(again_moves) > 0:
             if len(eat_moves) == 0 or again_moves[0] > eat_moves[0]:
