@@ -21,12 +21,26 @@ class Kalah:
         return possible_moves
 
     def PrintState(self):
-        state_str = ''
-        for i in range(self.cells_number // 2 - 1, -1, -1):
-            state_str += str(self.state[i]) + ' '  # first player
-        state_str += '\n  '
-        for i in range(self.cells_number // 2, self.cells_number):
-            state_str += str(self.state[i]) + ' '  # second player
+        state_str = '   '
+        for i in range(5, -1, -1):  # first player
+            cell_str = str(self.state[i])
+            if len(cell_str) == 1:
+                state_str += ' '
+            state_str += cell_str + ' '
+        state_str += '\n'
+        cell_str = str(self.state[6])
+        if len(cell_str) == 1:
+            state_str += ' '
+        state_str += cell_str + ' ' * 19
+        cell_str = str(self.state[13])
+        if len(cell_str) == 1:
+            state_str += ' '
+        state_str += cell_str + '\n   '
+        for i in range(self.cells_number // 2, self.cells_number - 1):  # second player
+            cell_str = str(self.state[i])
+            if len(cell_str) == 1:
+                state_str += ' '
+            state_str += str(self.state[i]) + ' '
         print(state_str)
 
     def IsOwnCell(self, cell_index):

@@ -1,18 +1,19 @@
 from GoodBot import *
 from SimpleBot import *
 from RandomBot import *
+from RealPlayer import *
 from Kalah import *
 from time import time
 
 player0_win = 0
 player1_win = 0
 equal_scores = 0
-games_count = 5000
+games_count = 1
 counter = 0
 
-log = False
-player0 = RandomBot(0, log=log)
-player1 = GoodBot(1, log=log)
+log = True
+player0 = GoodBot(0, log=True)
+player1 = RealPlayer(1, log=log)
 showMoves = False
 
 start_time = time()
@@ -27,14 +28,13 @@ for i in range(games_count):
             chosen_moves = player1.ChooseMove(kalah)
         kalah.MakeMoves(chosen_moves, showMoves)
         counter += len(chosen_moves)
-    if log:
-        print('     ', kalah.state)
+        if log:
+            kalah.PrintState()
+            print()
     if kalah.winner == 0:
         player0_win += 1
     elif kalah.winner == 1:
         player1_win += 1
-        if log:
-            print('\n' * 50)
     else:
         equal_scores += 1
 end_time = time()

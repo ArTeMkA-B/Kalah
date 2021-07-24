@@ -61,7 +61,7 @@ class SimpleBot:
                 count += 1"""
 
         if len(again_moves) > 0:
-            if len(not_again_moves) == 0 or again_moves[0] > not_again_moves[0]: #and (len(moves) > 2 or kalah.GetScore(self.id) >= 35):
+            if len(not_again_moves) == 0 or again_moves[0] > not_again_moves[0]:  #and (len(moves) > 3 or kalah.GetScore(self.id) >= 36):
                 if self.log:
                     print('(SB)', kalah.state, ':', moves, '=>', [again_moves[0]])
                 return [again_moves[0]]

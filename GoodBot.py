@@ -27,7 +27,8 @@ class GoodBot:
         best_moves = [move for move in list(all_moves.keys()) if all_moves.get(move) == all_moves.get(sequence)]
         chosen_move = self.ToArray(best_moves[randint(0, len(best_moves) - 1)])
         if self.log:
-            print('(GB)', self.kalah.state, ':', best_moves, '=>', chosen_move)
+            # print('(GB)', self.kalah.state, ':', best_moves, '=>', chosen_move)
+            print("GoodBot moves:", chosen_move)
         return chosen_move
 
     def ToString(self, array):
