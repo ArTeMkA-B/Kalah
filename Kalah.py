@@ -1,5 +1,5 @@
 from GameHistory import *
-from copy import deepcopy
+from copy import deepcopy, copy
 
 class Kalah:
     def __init__(self):
@@ -61,22 +61,27 @@ class Kalah:
             print('Player', self.active_player, 'makes move:', move)
         self.history.SaveMove(MoveInfo(self.active_player, move, deepcopy(self.state)))
 
+        temp_states = []
+
         # move chips
-        chips_count = self.state[move]
-        self.state[move] = 0
         cell_index = move
-        while chips_count > 0:
+        moves_number = self.state[move]
+        #self.state[move] = 0
+        while moves_number > 0:
             cell_index = (cell_index + 1) % self.cells_number
             if cell_index == self.kalah0_index and self.active_player == 1 or cell_index == self.kalah1_index and self.active_player == 0:
                 continue
             self.state[cell_index] += 1
-            chips_count -= 1
+            self.state[move] -= 1
+            moves_number -= 1
+            temp_states.append([copy(self.state), [cell_index]])
 
         # eat opponent chips
         if self.IsOwnCell(cell_index) and self.state[cell_index] == 1 and not self.IsOwnKalah(cell_index):
             self.AddToKalah(self.state[12 - cell_index] + 1)  # add chips from the opposite cell and 1 own chip from the current cell
             self.state[cell_index] = 0
             self.state[12-cell_index] = 0
+            temp_states.append([copy(self.state), [cell_index, 12 - cell_index, self.kalah0_index if self.active_player == 0 else self.kalah1_index]])
 
         # change active player
         if not (self.active_player == 0 and cell_index == self.kalah0_index or self.active_player == 1 and cell_index == self.kalah1_index):
@@ -89,7 +94,9 @@ class Kalah:
             # clear cells except kalah
             start_index = 0 if self.active_player == 0 else 7
             for i in range(start_index, start_index + 6):
-                self.state[i] = 0
+                if self.state[i] != 0:
+                    self.state[i] = 0
+                    temp_states.append([copy(self.state), [i, self.kalah0_index if self.active_player == 0 else self.kalah1_index]])
 
             # find the winner
             if self.GetScore(0) > self.GetScore(1):
@@ -102,6 +109,8 @@ class Kalah:
                 self.PrintResult()
         if log:
             self.PrintState()
+
+        return temp_states
 
     def UndoLastMove(self):
         self.state = deepcopy(self.history.GetLastState())
@@ -120,8 +129,10 @@ class Kalah:
             print("Equal scores!")
 
     def MakeMoves(self, moves_array:list, log=False):
+        temp_states = []
         for move in moves_array:
-            self.MakeMove(move, log)
+            temp_states.append([move, self.MakeMove(move, log)])
+        return temp_states
 
     def GetRemainingChips(self):
         if self.active_player == 0:
